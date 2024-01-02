@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Classification and Sentiment Analysis</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Image Classification and Sentiment Analysis</h1>
+
+      <h2>Image Classification</h2>
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" />
+        <input type="submit" value="Classify Image" />
+      </form>
+
+      <h2>Sentiment Analysis</h2>
+      <form action="/predict" method="post">
+        <textarea name="text" rows="4" cols="50"></textarea>
+        <input type="submit" value="Analyze Sentiment" />
+      </form>
+
+      <a href="{{ url_for('clear') }}">clear</a>
+
+      {% if text %}
+      <p>You entered: {{ text }}</p>
+      <p>Result: {{ result }}</p>
+      <p>Positive: {{ probabilities['POS'] }} %</p>
+      <p>Neutral: {{ probabilities['NEU'] }} %</p>
+      <p>Negative: {{ probabilities['NEG'] }} %</p>
+      {% endif %}
+
+      {% if categories %}
+      <div class="content">
+        
+        <img src="{{url_for('static', filename=name)}}" height="250px" />
+        <div>
+            Top 5 categories :
+        </div>
+      {% for i in range(top5prob.size(0)) %}
+        <div>
+            {{i+1}} -
+            {{categories[top5_catid[i]]}}
+            {{top5prob[i].item()}}
+        </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+
+      <div class="result">
+        <h2>Result:</h2>
+        <p id="result"></p>
+      </div>
+  </body>
+</html>
